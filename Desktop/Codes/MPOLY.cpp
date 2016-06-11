@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 typedef pair < int , int > Point;
+/*Sort the points clockwise and then do a dp with state {current , previous point}.
+*/
 
 bool comp(Point a,Point  b)
 {
@@ -46,10 +48,11 @@ int main()
     ios::sync_with_stdio(0);
     cin.tie(0);
     string S;
-    while(cin>>S)
+    while(1)
     {
         int N , i , j ;
-        cin>>N;
+        if(cin>>N);
+        else return 0;
         vector < Point > A(N+1);
         for(i=1;i<=N;++i)
             cin>>A[i].first>>A[i].second;
@@ -69,8 +72,7 @@ int main()
                     ans = max(ans , dp[i][j]);
             }
         }
-        cout<<"POLYGON.OUT\n\n";
-        cout<<ans<<"\n\n";
+        cout<<ans<<"\n";
     }
     return 0;
 }
