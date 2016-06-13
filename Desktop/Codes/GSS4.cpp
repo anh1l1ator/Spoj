@@ -1,3 +1,9 @@
+/*
+You can change an element at most log(A[i]) time as the sqrt() function is atleast equivalent to dividing by 2.
+Now just figure out how to change only elements which are needed to be changed i.e. they >1 else wise you might be increasing
+computations. =)
+Cheers
+*/
 #include<bits/stdc++.h>
 using namespace std;
 typedef long long LL;
