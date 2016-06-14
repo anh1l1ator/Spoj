@@ -1,5 +1,11 @@
 #include<bits/stdc++.h>
 using namespace std;
+/*
+Combine GSS1 and observation that you need to find max prefix[x2,y2] - min prefix[x1,y1] when these segments aren't merged.
+When they share some common part then We can make 2 cases either both the end points lie in between the common segment
+i.e. GSS1 or atleast one point lies outside which can be done using maximum and minimum of prefix sums.
+
+*/
 
 #define mid(l,r) (l+r)/2
 #define lc(idx) (2*idx+1)
