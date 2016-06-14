@@ -4,6 +4,7 @@ const int INF = 1e9;
 
 template <class T>
 struct FenwickTree {
+    T INF;
     int n;
 	vector < vector < T >  > inter;
 	vector < T > arr;
@@ -12,6 +13,8 @@ struct FenwickTree {
         inter.resize(2);
         inter[0].resize(N+1);
         inter[1].resize(N+1);
+        INF = std::numeric_limits<T>::max();
+        INF-=1e9+7;
         this->n = N;
         for (int i = 0; i <= n; ++i)
         {
@@ -55,17 +58,7 @@ struct FenwickTree {
         }
     }
 };
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
-//!Change INF value according to T
+
 //!Base indexing 0
 //!Base indexing 0
 //!Base indexing 0
@@ -77,7 +70,6 @@ int main()
 {
 
     int N , Q , i ;
-
     scanf("%d%d",&N,&Q);
     vector < int > A(N);
     for(i=0;i<N;++i)scanf("%d",&A[i]);
