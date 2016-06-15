@@ -19,7 +19,7 @@ struct Node{
         l  =  -1 ;
         r  =  -1;
     }
-}tree[800001];
+}tree[8600001];
 int idx=0;
 int build(int L , int R)
 {
@@ -49,6 +49,7 @@ int update(int L , int R , int root , int qidx )
 
 int query(int L , int R , int root1 , int root2 , int K  )
 {
+    int x = L , y = R;
     for(;L!=R;)
     {
         if(tree[tree[root2].l].cnt-tree[tree[root1].l].cnt>=K)
@@ -65,24 +66,14 @@ int query(int L , int R , int root1 , int root2 , int K  )
             root2 = tree[root2].r;
         }
     }
+    assert(x<=L && L<=y);
     return L;
 }
 
-void go(int L , int R, int root)
-{
-    cout<<tree[root].cnt<<' ';
-    if(L==R)
-    {
-        return ;
-    }
-    go(L,mid(L,R),tree[root].l);
-    go(mid(L,R)+1,R,tree[root].r);
-
-
-}
 int main()
 {
-//    freopen("out.txt","w+",stdout);
+    ios::sync_with_stdio(0);
+    cin.tie(0);
     int N , M , i  ,x,y,z;
     cin>>N>>M;
     vector < int > A(N+1),V;
@@ -99,18 +90,11 @@ int main()
     {
         B[i] = lower_bound(V.begin(),V.end(),A[i])-V.begin();
         RM[B[i]] = A[i];
-//        cout<<B[i]<<" "<<RM[B[i]]<<endl;
     }
+    
     root[0] = build(0,N-1);
-
-
     for(i=1;i<=N;++i)
         root[i] = update(0,N-1,root[i-1],B[i]);
-
-//    for(i=0;i<=N;++i)
-//        go(0,N-1,root[i]),puts("");
-
-
     for(;M;--M)
     {
         cin>>x>>y>>z;
