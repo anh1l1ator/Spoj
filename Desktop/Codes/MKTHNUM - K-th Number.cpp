@@ -3,6 +3,8 @@ using namespace std;
 #define mid(L,R) ((L+R)/2)
 #define lc(idx)  (2*idx+1)
 #define rc(idx)  (2*idx+2)
+
+/* This is simple usage of Persistent segment tree. Other approaches include merge sort tree, Fractional Cascading*/
 int RM[100001];
 struct Node{
     int cnt;
