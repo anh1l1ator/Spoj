@@ -131,3 +131,5 @@ public:
     }
 };
 
+ConvexHullDynamic dpHull_min(0);	// 0 is when you need a minimum convex hull
+ConvexHullDynamic dpHull_max(1);	// 1 is when you need a minimum convex hull
