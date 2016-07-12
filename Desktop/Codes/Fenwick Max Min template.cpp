@@ -56,6 +56,7 @@ struct FenwickTree {
         inter[1][indx] = mx = max(mx, inter[1][indx]);
 		inter[0][indx] = mn = min(mn, inter[0][indx]);
         }
+        arr[indx-1]=val;
     }
 };
 
