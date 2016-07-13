@@ -1,7 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int nax = 1e6;
 
 template < class T >
 class PriorityQueue
@@ -11,8 +10,9 @@ class PriorityQueue
     #define rc(x)  (2*x+1)
     vector < T > Q;
     int idx ;
+    int sze ;
     public:
-    PriorityQueue() : idx(1) {Q.resize(nax);}
+    PriorityQueue(int x) : idx(1)  {Q.resize(x+1);}
 
     void push(T x)
     {
@@ -67,8 +67,8 @@ int main()
     ios::sync_with_stdio(0);cin.tie(0);
 
     int N , i  , x;
-    PriorityQueue < int > Q;
     cin>>N;
+    PriorityQueue < int > Q(N);
     for(i=0;i<N;++i)
     {
         cin>>x;
@@ -76,10 +76,10 @@ int main()
     }
     while(!Q.empty())
     {
-        cout<<Q.top()<<" ";
+        cout<<Q.top()<<"\n";
         Q.pop();
     }
-    cout<<'\n';
+
     return 0;
 }
 
