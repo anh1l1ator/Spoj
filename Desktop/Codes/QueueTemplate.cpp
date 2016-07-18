@@ -1,15 +1,14 @@
-#include<bits/stdc++.h>
-using namespace std;
-template < class T>
-struct Node
-{
-    T data;
-    Node *Next , *Prev;
-    Node(): Next(NULL),Prev(NULL) {}
-};
 template < class T >
 class Que
 {
+    template < class TT>
+    struct Node
+    {
+        TT data;
+        Node *Next , *Prev;
+        Node(): Next(NULL),Prev(NULL) {}
+    };
+
     Node  < T >  *rear , *front;
     public:
     Que(): rear(NULL) , front(NULL){}
@@ -47,18 +46,3 @@ class Que
         return front==NULL;
     }
 };
-
-int main()
-{
-    Que < int > Q;
-    int i;
-    for(i=1;i<=10;++i)
-        Q.push(i);
-    while(!Q.empty())
-    {
-        cout<<Q.top()<<" ";
-        Q.pop();
-    }
-
-    return 0;
-}
