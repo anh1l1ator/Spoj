@@ -1,3 +1,6 @@
+#include<bits/stdc++.h>
+using namespace std;
+
 template < class T >
 class Que
 {
@@ -12,6 +15,7 @@ class Que
     Node  < T >  *rear , *front;
     public:
     Que(): rear(NULL) , front(NULL){}
+
     void push(T data)
     {
         if(rear==NULL){
@@ -45,4 +49,20 @@ class Que
     {
         return front==NULL;
     }
+    ~Que()
+    {
+        while(!(*this).empty())
+        {
+            (*this).pop();
+        }
+    }
 };
+int main()
+{
+    Que < int > Q;
+    int i;
+    for(i=1;i<=10;++i)Q.push(i);
+//    cout<<Q.top()<<" ";
+
+    return 0;
+}
