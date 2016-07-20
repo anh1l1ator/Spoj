@@ -14,7 +14,7 @@ class PriorityQueue
         A[idx] = v;
         int x= idx;
         ++idx;
-        for(;x>1 &&(cmp==NULL?A[x/2]>A[x]:cmp(A[x],A[x/2]));x/=2){
+        for(;x>1 &&(cmp==NULL?A[x]<A[x/2]:cmp(A[x],A[x/2]));x/=2){
             swap(A[x],A[x/2]);
         }
     }
