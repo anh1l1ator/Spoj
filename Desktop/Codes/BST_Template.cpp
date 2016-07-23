@@ -7,10 +7,10 @@ class BST
     struct Node
     {
         T data ;
-        int sub ;
+
         Node *left , *right ;
-        Node(): data(-1),sub(1),left(NULL),right(NULL) {}
-        Node(int x): data(x),sub(1),left(NULL),right(NULL) {}
+        Node(): data(-1),left(NULL),right(NULL) {}
+        Node(int x): data(x),left(NULL),right(NULL) {}
     };
     Node *root;
     T INF ;
