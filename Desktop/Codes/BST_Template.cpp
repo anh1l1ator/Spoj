@@ -115,12 +115,14 @@ class BST
         }
         return ret;
     }
+
     T upper_bound(T key)
     {
         T ret = INF;
         Node *X = root ;
         while(X!=NULL)
         {
+
             if(X->data <= key )
                 X = X->right;
             else
@@ -131,6 +133,7 @@ class BST
         }
         return ret;
     }
+
     T inorder_predecessor(T key)
     {
         T ret = INF;
@@ -150,35 +153,87 @@ class BST
         return ret;
     }
 
+    T begin()
+    {
+        if(!root)return INF;
+        Node *H = root;
+        while(H->left!=NULL)
+        {
+            H=H->left;
+        }
+        return H->data;
+    }
+
+    T end()
+    {
+        return INF ;
+    }
+    T next(T x)
+    {
+        return (*this).upper_bound(x);
+    }
+    T rbegin()
+    {
+        if(!root)return INF;
+        return inorder_predecessor(INF);
+    }
+    T rnext(T x)
+    {
+        return (*this).inorder_predecessor(x);
+    }
+    bool rend(T x)
+    {
+        return x == (*this).begin();
+    }
+    T data()
+    {
+        return root->data;
+    }
 };
 
 int main()
 {
     srand(time(0));
     ios::sync_with_stdio(0);
-    BST < int > st;
-    int N = 10099, i ;
-    vector < int > V;
-    for(i=0;i<N;++i)
-        V.push_back(rand());
-    sort(V.begin(),V.end());
-    V.erase(unique(V.begin(),V.end()),V.end());
-    for(auto v:V)
-        st.add(v);
-    st.inorder();
-    random_shuffle(V.begin(),V.end());
+    BST < int > st1 , st2;
+    const int N = 10;
 
-    for(auto v:V)
+    st1.add(5);
+    st1.add(1);
+    st1.add(10);
+    st1.add(0);
+    st1.add(4);
+    st1.add(7);
+    st1.add(9);
+
+    st2.add(10);
+    st2.add(7);
+    st2.add(20);
+    st2.add(4);
+    st2.add(9);
+
+    int i = st1.begin();
+    int j = st2.begin();
+
+
+
+    for(;i!=INT_MAX && j!=INT_MAX;)
     {
-        cout<<v<<":\n";
-        st.inorder();
-        cout<<'\n';
-        cout<<st.lower_bound(v)<<'\n';
-        cout<<st.upper_bound(v)<<'\n';
-        cout<<st.inorder_predecessor(st.upper_bound(v))<<'\n';
-        cout<<"\n\n";
+        if(i>j)
+        {
+            j = st2.next(j);
+        }
+        else if(i<j)
+        {
+            i = st1.next(i);
+        }
+        else
+        {
+            cout<<i<<" ";
+            i = st1.next(i);
+            j = st2.next(j);
+        }
     }
-
 
 
     return 0;
