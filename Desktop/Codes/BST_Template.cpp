@@ -1,219 +1,184 @@
 #include<bits/stdc++.h>
 using namespace std;
-template < typename T>
+
+template < class T >
 class BST
 {
     struct Node
     {
         T data ;
-        int ele ;
-        Node *left , *right;
-        Node(): ele(0),data(0),left(NULL),right(NULL){}
-        Node(T x): ele(1),data(x),left(NULL),right(NULL){}
+        int sub ;
+        Node *left , *right ;
+        Node(): data(-1),sub(1),left(NULL),right(NULL) {}
+        Node(int x): data(x),sub(1),left(NULL),right(NULL) {}
     };
     Node *root;
+    T INF ;
     public:
-    BST(): root(NULL){}
-    bool Find(T x)
+    BST(): root(NULL) {INF = numeric_limits<T>::max();}
+    void Find(T foo  , Node *&X , Node*&Y)
     {
-        Node *H = root ;
-        while(H!=NULL)
+        Y = NULL , X = root;
+        while(X!=NULL)
         {
-            if(H->data == x)
-                return 1;
-            if(H->data < x)
-                H = H->right;
+            if(X->data == foo)return ;
+            else if(X->data > foo){Y = X; X = X->left;}
             else
-                H = H->left;
+            {Y = X; X = X->right;}
         }
-        return 0;
+        return ;
     }
-
-    void push(T data)
+    void add(T key)
     {
-        if(root==NULL)
+        Node *X , *Y ;
+        Find(key,X,Y);
+        if(X!=NULL)return ;
+        if(Y==NULL)
         {
-            root = new Node(data);
+            root = new Node(key);
             return ;
         }
-        if((*this).Find(data))return ;
-        Node *H = root , *prev = NULL;
-        while(H!=NULL)
-        {
-            H->ele+=1;
-            prev = H ;
-            if(H->data < data)
-                H = H->right;
-            else
-                H = H->left;
-        }
-        assert(prev);
-        if(prev->data < data)
-            prev->right = new Node(data);
         else
-            prev->left  = new Node(data);
-    }
-    int size_of(Node *X)
-    {
-        if(!X)return 0;
-        return X->ele;
-    }
-
-    T kTh(int k)
-    {
-        assert(k<=size_of(root));
-        Node *H = root;
-        while(k>0)
         {
-            if(size_of(H->left) >= k)
-                H = H->left;
-            else if(size_of(H->left) < k)
-            {
-                k-=size_of(H->left);
-                if(k==1)return H->data;
-                k-=1;
-                H = H->right;
-            }
+            if(Y->data < key)
+                Y->right = new Node(key);
+            else
+                Y->left  = new Node(key);
         }
-        assert(0);
     }
-
-    void del(Node *H , Node *prev)
+    void caseB(Node *X , Node *Y)
     {
-        if(H->left && H->right)
+        Node *P1 = X  , *H1 = X->right;
+        while(H1->left)
         {
-            Node *X = H->right;
-            Node *P2= H;
-            while(X->left)
-            {
-                X->ele-=1;
-                P2=X;
-                X=X->left;
-            }
-            int data = P2->data;
-            del(X,P2);
-            H->data = data;
+            P1 = H1;
+            H1 = H1->left;
+        }
+        T save = H1->data;
+        caseA(H1,P1);
+        X->data = save;
+    }
+    void caseA(Node *X , Node *Y)
+    {
+        if(Y==NULL)
+        {
+            root = root->right?root->right:root->left;
+            delete X;
         }
         else
         {
-            if(prev->data==-1)
-            {
-                root = root->right?root->right:root->left;
-                delete H;
-                return ;
-            }
-            if(prev->right==H)prev->right=H->right?H->right:H->left;
-            else prev->left=H->right?H->right:H->left;
-            delete H;
-        }
-    }
-
-    void del_key(T x)
-    {
-        if(!Find(x))return;
-        Node *H = root , *prev = new Node(-1);
-        while(H->data!=x && H->data!=x)
-        {
-            H->ele-=1;
-            prev = H ;
-            if(H->data < x)
-                H = H->right;
+            if(Y->left == X)
+                Y->left=X->right?X->right:X->left;
             else
-                H = H->left;
+                Y->right=X->right?X->right:X->left;
+            delete X;
         }
-        assert(H);
-        H->ele-=1;
-        del(H,prev);
     }
-
-    int size()
+    void del_key(T key)
     {
-        return size_of(root);
+        Node *X , *Y ;
+        Find(key,X,Y);
+        if(X==NULL)return ;
+        if(X->left && X->right)
+            caseB(X,Y);
+        else
+            caseA(X,Y);
+    }
+    void go(Node * r)
+    {
+        if(!r)return ;
+        go(r->left);
+        cout<<r->data<<" ";
+        go(r->right);
+    }
+    void inorder()
+    {
+        go(root);
     }
     bool empty()
     {
-        return size_of(root)>0;
+        return root == NULL;
     }
-};
-int main()
-{
-    srand(time(0));
-    BST < int > tree;
-    vector < int > V;
-    const int N = 1e6;
-    int i;
-    for(i=0;;++i)
+    T lower_bound(T key)
     {
-        int x = rand()%3;
-        if(x==0)
+        T ret = INF;
+        Node *X = root ;
+        while(X!=NULL)
         {
-            int y = rand();
-            tree.push(y);
-            if(!binary_search(V.begin(),V.end(),y))
+            if(X->data < key )
+                X = X->right;
+            else
             {
-                V.push_back(y);
-                sort(V.begin(),V.end());
+                ret = X->data;
+                X=X->left;
             }
         }
-        else
+        return ret;
+    }
+    T upper_bound(T key)
+    {
+        T ret = INF;
+        Node *X = root ;
+        while(X!=NULL)
         {
-            if(!tree.size())continue;
-            int k = rand()%tree.size()+1;
-            if(i%2)
+            if(X->data <= key )
+                X = X->right;
+            else
             {
-                tree.del_key(V[k-1]);
-                V.erase(V.begin()+k-1,V.begin()+k);
+                ret = X->data;
+                X=X->left;
+            }
+        }
+        return ret;
+    }
+    T inorder_predecessor(T key)
+    {
+        T ret = INF;
+        Node *X = root ;
+        while(X!=NULL)
+        {
+            if(X->data < key )
+            {
+                ret = X->data;
+                X = X->right;
             }
             else
             {
-                if(tree.kTh(k)!=V[k-1])
-                {
-                    cout<<"ERROR\n";
-                }
+                X=X->left;
             }
         }
+        return ret;
     }
 
-//    tree.push(1);
-//    tree.push(2);
-//    tree.push(33);
-//    tree.push(43);
-//    tree.push(-1);
-//    tree.del_key(1);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    cout<<tree.kTh(3)<<'\n';
-//    cout<<tree.kTh(4)<<'\n';
-//    tree.del_key(33);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    cout<<tree.kTh(3)<<'\n';
-//    tree.del_key(43);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    tree.del_key(-1);
-//    cout<<tree.kTh(1)<<'\n';
-//    tree.del_key(1);
-//    tree.push(1);
-//    tree.push(2);
-//    tree.push(33);
-//    tree.push(43);
-//    tree.push(-1);
-//    tree.del_key(1);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    cout<<tree.kTh(3)<<'\n';
-//    cout<<tree.kTh(4)<<'\n';
-//    tree.del_key(33);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    cout<<tree.kTh(3)<<'\n';
-//    tree.del_key(43);
-//    cout<<tree.kTh(1)<<'\n';
-//    cout<<tree.kTh(2)<<'\n';
-//    tree.del_key(-1);
-//    cout<<tree.kTh(1)<<'\n';
-//    tree.del_key(1);
+};
+
+int main()
+{
+    srand(time(0));
+    ios::sync_with_stdio(0);
+    BST < int > st;
+    int N = 10099, i ;
+    vector < int > V;
+    for(i=0;i<N;++i)
+        V.push_back(rand());
+    sort(V.begin(),V.end());
+    V.erase(unique(V.begin(),V.end()),V.end());
+    for(auto v:V)
+        st.add(v);
+    st.inorder();
+    random_shuffle(V.begin(),V.end());
+
+    for(auto v:V)
+    {
+        cout<<v<<":\n";
+        st.inorder();
+        cout<<'\n';
+        cout<<st.lower_bound(v)<<'\n';
+        cout<<st.upper_bound(v)<<'\n';
+        cout<<st.inorder_predecessor(st.upper_bound(v))<<'\n';
+        cout<<"\n\n";
+    }
+
 
 
     return 0;
