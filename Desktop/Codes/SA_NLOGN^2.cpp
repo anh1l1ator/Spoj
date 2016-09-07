@@ -68,6 +68,8 @@ struct SA
             assert(0);
         }
         int L = x , R = y;
+        if(R<L)
+            return N - this->L[L].second;
         assert(L<=R);
         return min(dp[LG[(R-L+1)]][L] , dp[LG[R-L+1]][R-(1<<LG[R-L+1])+1]);
     }
