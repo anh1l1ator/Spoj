@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+// https://www.codechef.com/problems/INSQ16F
 using namespace std;
 struct SA
 {
