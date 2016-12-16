@@ -1,9 +1,12 @@
+#include<bits/stdc++.h>
+using namespace std;
+ 
 class ConvexHullDynamic
 {
     typedef long long coef_t;
     typedef long long coord_t;
     typedef long long val_t;
-
+    const val_t INF = 1e18;
     /*
      * Line 'y=a*x+b' represented by 2 coefficients 'a' and 'b'
      * and 'xLeft' which is intersection with previous line in hull(first line has -INF)
@@ -13,10 +16,10 @@ private:
     {
         coef_t a, b;
         double xLeft;
-
+ 
         enum Type {line, maxQuery, minQuery} type;
         coord_t val;
-
+ 
         explicit Line(coef_t aa=0, coef_t bb=0) : a(aa), b(bb), xLeft(-INFINITY), type(Type::line), val(0) {}
         val_t valueAt(coord_t x) const { return a*x+b; }
         friend bool areParallel(const Line& l1, const Line& l2) { return l1.a==l2.a; }
@@ -31,11 +34,11 @@ private:
                 return this->xLeft > l2.val;
         }
     };
-
+ 
 private:
     bool            isMax; //whether or not saved envelope is top(search of max value)
     std::set<Line>  hull;  //envelope itself
-
+ 
 private:
     /*
      * INFO:        Check position in hull by iterator
@@ -43,7 +46,7 @@ private:
      */
     bool hasPrev(std::set<Line>::iterator it) { return it!=hull.begin(); }
     bool hasNext(std::set<Line>::iterator it) { return it!=hull.end() && std::next(it)!=hull.end(); }
-
+ 
     /*
      * INFO:        Check whether line l2 is irrelevant
      * NOTE:        Following positioning in hull must be true
@@ -59,7 +62,7 @@ private:
                && (    isMax && irrelevant(*std::prev(it), *it, *std::next(it))
                        || !isMax && irrelevant(*std::next(it), *it, *std::prev(it)) );
     }
-
+ 
     /*
      * INFO:        Updates 'xValue' of line pointed by iterator 'it'
      * COMPLEXITY:  O(1)
@@ -68,7 +71,7 @@ private:
     {
         if (isMax && !hasPrev(it) || !isMax && !hasNext(it))
             return it;
-
+ 
         double val = intersectX(*it, isMax?*std::prev(it):*std::next(it));
         Line buf(*it);
         it = hull.erase(it);
@@ -76,10 +79,10 @@ private:
         it = hull.insert(it, buf);
         return it;
     }
-
+ 
 public:
     explicit ConvexHullDynamic(bool isMax): isMax(isMax) {}
-
+ 
     /*
      * INFO:        Adding line to the envelope
      *              Line is of type 'y=a*x+b' represented by 2 coefficients 'a' and 'b'
@@ -90,7 +93,7 @@ public:
         //find the place where line will be inserted in set
         Line l3 = Line(a, b);
         auto it = hull.lower_bound(l3);
-
+ 
         //if parallel line is already in set, one of them becomes irrelevant
         if (it!=hull.end() && areParallel(*it, l3))
         {
@@ -99,15 +102,15 @@ public:
             else
                 return;
         }
-
+ 
         //try to insert
         it = hull.insert(it, l3);
         if (irrelevant(it)) { hull.erase(it); return; }
-
+ 
         //remove lines which became irrelevant after inserting line
         while (hasPrev(it) && irrelevant(std::prev(it))) hull.erase(std::prev(it));
         while (hasNext(it) && irrelevant(std::next(it))) hull.erase(std::next(it));
-
+ 
         //refresh 'xLine'
         it = updateLeftBorder(it);
         if (hasPrev(it))
@@ -119,17 +122,17 @@ public:
      * INFO:        Query, which returns max/min(depends on hull type - see more info above) value in point with abscissa 'x'
      * COMPLEXITY:  O(log N), N-amount of lines in hull
      */
+ 
     val_t getBest(coord_t x) const
     {
         Line q;
         q.val = x;
         q.type = isMax ? Line::Type::maxQuery : Line::Type::minQuery;
-
+        if(hull.empty())
+            return isMax? -INF:INF;
         auto bestLine = hull.lower_bound(q);
+        if(hull.begin()==bestLine && isMax)return isMax?-INF:INF;
         if (isMax) --bestLine;
         return bestLine->valueAt(x);
     }
 };
-
-ConvexHullDynamic dpHull_min(0);	// 0 is when you need a minimum convex hull
-ConvexHullDynamic dpHull_max(1);	// 1 is when you need a maximum convex hull
