@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    long int t;
+    cin>>t;
+    while(t--)
+    {
+        char s[100],s1[100],s2[100],c1,c2;
+        cin>>s>>c1>>s1>>c2>>s2;
+        long int num1=0,num2=0,i;
+        map<string,int>M;
+        M.clear();
+        for(i=0;i<strlen(s);i++)
+        {
+            if(s[i]>=48 && s[i]<=57)
+            {
+                num1=num1*10+(s[i]-48);
+            }
+            else
+            {
+                num1=0;
+                M[s]=1;
+                break;
+            }
+        }
+        int flag=0;
+        if(num1==0)
+            flag=1;
+        for(i=0;i<strlen(s1);i++)
+        {
+            if(s1[i]>=48 && s1[i]<=57)
+            {
+                if(flag==1)
+                num1=num1*10+(s1[i]-48);
+                else
+                    num2=num2*10+(s1[i]-48);
+            }
+            else
+            {
+                num2=0;
+                M[s1]=1;
+                break;
+            }
+        }
+        if(num2==0)
+        {
+          flag=2;
+        for(i=0;i<strlen(s2);i++)
+        {
+            if(s2[i]>=48 && s2[i]<=57)
+            {
+                num2=num2*10+(s2[i]-48);
+            }
+            else
+            {
+                M[s2]=1;
+                break;
+            }
+        }
+        }
+        long int req=0;
+        if(flag==2)
+            req=num2-num1;
+        else
+            req=num1+num2;
+            long int count=0;
+            if(M[s]==0)
+                {cout<<s<<" + ";
+                count++;
+                }
+            else
+                cout<<req<<" + ";
+            if(M[s1]==0)
+                {cout<<s1<<" = ";
+                count++;
+                }
+             else
+                cout<<req<<" = ";
+                if(count==2)
+                    cout<<req<<endl;
+                    else
+                        cout<<s2<<endl;
+    }
+}
